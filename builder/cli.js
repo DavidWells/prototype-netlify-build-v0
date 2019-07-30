@@ -26,7 +26,12 @@ process.env.SITE = 'https://site.com'
 
   /* Parse plugins */
   const plugins = config.plugins || []
-  const allPlugins = plugins.reduce((acc, curr) => {
+  const allPlugins = plugins.filter((plug) => {
+    /* Load enabled plugins only */
+    const name = Object.keys(plug)[0]
+    const pluginConfig = plug[name] || {}
+    return pluginConfig.enabled !== false && pluginConfig.enabled !== 'false'
+  }).reduce((acc, curr) => {
     const name = Object.keys(curr)[0]
     const pluginConfig = curr[name] || {}
     let code
@@ -151,7 +156,11 @@ process.env.SITE = 'https://site.com'
   /* Execute build with plugins */
   console.log()
   const manifest = await engine(buildInstructions, config)
-  console.log('Build complete', manifest)
+  console.log(chalk.greenBright('Build complete'))
+  if (Object.keys(manifest).length) {
+    console.log('Manifest:')
+    deepLog(manifest)
+  }
 })()
 
 function preFix(hook) {
