@@ -19,7 +19,7 @@ async function netlifyConfig(configFile, cliFlags) {
       match: RegExp(/^secrets:/g),
       resolver: (varToProcess, opts, currentObject) => {
         // Call to remote secret store
-        return Promise.resolve('remote entreprise secret')
+        return Promise.resolve('shhhhhhh')
       }
     }, {
       /* Match variables ${context:xyz} */

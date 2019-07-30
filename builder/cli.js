@@ -20,7 +20,7 @@ process.env.SITE = 'https://site.com'
   } catch (err) {
     console.log('Config error', err)
   }
-  console.log('Current Netlify Config')
+  console.log(chalk.cyanBright.bold('Netlify Config'))
   deepLog(config)
   console.log()
 
@@ -57,47 +57,6 @@ process.env.SITE = 'https://site.com'
     Object.keys(methods).forEach((hook) => {
       if (!acc.lifeCycleHooks[hook]) {
         acc.lifeCycleHooks[hook] = []
-      }
-      if (config.build.lifecycle[hook]) {
-        // Only add commands from 'build.lifecycle' once. Todo refactor
-        const alreadyThere = acc.lifeCycleHooks[hook].some((x) => {
-          return x.config
-        })
-        if (!alreadyThere) {
-          acc.lifeCycleHooks[hook] = acc.lifeCycleHooks[hook].concat({
-            name: 'config',
-            hook: hook,
-            config: {},
-            method: async () => {
-              try {
-                // Parse commands and turn into exec
-                if (Array.isArray(config.build.lifecycle[hook])) {
-                  const doCommands = config.build.lifecycle[hook].map((cmd) => {
-                    return execCommand(cmd)
-                  })
-                  await Promise.all(doCommands)
-                } else {
-                  const commands = config.build.lifecycle[hook].split('\n')
-                  const doCommands = commands.map((cmd) => {
-                    if (!cmd) {
-                      return Promise.resolve()
-                    }
-                    return execCommand(cmd)
-                  })
-                  await Promise.all(doCommands)
-                }
-              } catch (err) {
-                console.log(chalk.redBright(`Error from netlify config build.lifecycle.${hook} hook from command:`))
-                console.log(`"${config.build.lifecycle[hook]}"`)
-                console.log()
-                console.log(chalk.redBright('Error message\n'))
-                console.log(err.stderr)
-                console.log()
-                process.exit(1)
-              }
-            }
-          })
-        }
       }
       acc.lifeCycleHooks[hook] = acc.lifeCycleHooks[hook].concat({
         name: name,
@@ -144,6 +103,43 @@ process.env.SITE = 'https://site.com'
 
   /* Get active build instructions */
   const buildInstructions = fullLifecycle.reduce((acc, n) => {
+    /* Merge in config lifecycle events first */
+    if (config.build.lifecycle[n]) {
+      acc = acc.concat({
+        name: `config.build.lifecycle.${n}`,
+        hook: n,
+        config: {},
+        method: async () => {
+          try {
+            // Parse commands and turn into exec
+            if (Array.isArray(config.build.lifecycle[n])) {
+              const doCommands = config.build.lifecycle[n].map((cmd) => {
+                return execCommand(cmd)
+              })
+              await Promise.all(doCommands)
+            } else {
+              const commands = config.build.lifecycle[n].split('\n')
+              const doCommands = commands.map((cmd) => {
+                if (!cmd) {
+                  return Promise.resolve()
+                }
+                return execCommand(cmd)
+              })
+              await Promise.all(doCommands)
+            }
+          } catch (err) {
+            console.log(chalk.redBright(`Error from netlify config build.lifecycle.${n} n from command:`))
+            console.log(`"${config.build.lifecycle[n]}"`)
+            console.log()
+            console.log(chalk.redBright('Error message\n'))
+            console.log(err.stderr)
+            console.log()
+            process.exit(1)
+          }
+        }
+      })
+    }
+
     if (allPlugins.lifeCycleHooks[n]) {
       acc = acc.concat(allPlugins.lifeCycleHooks[n])
     }
@@ -155,8 +151,11 @@ process.env.SITE = 'https://site.com'
 
   /* Execute build with plugins */
   console.log()
+  console.log(chalk.greenBright.bold('Running Netlify Build Lifecycle'))
+  console.log()
   const manifest = await engine(buildInstructions, config)
-  console.log(chalk.greenBright('Build complete'))
+  console.log(chalk.greenBright.bold('Netlify Build complete'))
+  console.log()
   if (Object.keys(manifest).length) {
     console.log('Manifest:')
     deepLog(manifest)
@@ -190,7 +189,8 @@ async function engine(methodsToRun, config) {
     const { method, hook, config, name } = plugin
     const currentData = await promiseChain
     if (method && typeof method === 'function') {
-      console.log(chalk.cyanBright(`> ${i + 1}. Running "${hook}" lifecycle from "${name}" plugin`))
+      const source = (name.match(/^config\.build/)) ? 'via config' : 'plugin'
+      console.log(chalk.cyanBright(`> ${i + 1}. Running "${hook}" lifecycle from "${name}" ${source}`))
       console.log()
       const pluginReturnValue = await method(config)
       console.log()
