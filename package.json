@@ -12,6 +12,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "netlify-build": "netlify/netlify-build"
+    "netlify-build": "git@github.com:netlify/netlify-build.git"
   }
 }
