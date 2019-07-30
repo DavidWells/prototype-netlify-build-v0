@@ -9,6 +9,7 @@
     "do-buildbot": "node ./builder/cli.js",
     "foo": "echo 'bar'",
     "build": "mkdir -p build && cp index.html build",
+    "dry": "npm run go -- --dryRun",
     "go": "node ./builder/cli.js"
   },
   "keywords": [],

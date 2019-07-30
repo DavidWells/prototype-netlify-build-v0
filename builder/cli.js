@@ -146,6 +146,22 @@ process.env.SITE = 'https://site.com'
     return acc
   }, [])
 
+  if (cliFlags.dryRun) {
+    console.log()
+    console.log(chalk.cyanBright.bold('Netlify Build Steps'))
+    console.log()
+    buildInstructions.forEach((instruction, i) => {
+      const { name, hook } = instruction
+      const source = (name.match(/^config\.build/)) ? 'config' : 'plugin'
+      const count = chalk.cyanBright(`${i + 1}.`)
+      const hookName = chalk.bold(`"${hook}"`)
+      const sourceOutput = chalk.yellow(`${name}`)
+      console.log(`${count}  ${hookName} lifecycle hook from ${source} "${sourceOutput}"`)
+    })
+    console.log()
+    // deepLog(buildInstructions)
+    process.exit(0)
+  }
   // console.log('buildInstructions', buildInstructions)
   /* patch environment dependencies */
 
