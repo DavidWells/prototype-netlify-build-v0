@@ -37,6 +37,10 @@ const lifecycle = [
 
 The Lifecycle flows through events and their `pre` and `post` counterparts.
 
+`pre` happens before a specific event
+
+`post` happens before a specific event
+
 ```
       ┌───────────────┬────────────────┬──────────────────┐
       │      pre      │     event      │       post       │
@@ -53,10 +57,6 @@ The Lifecycle flows through events and their `pre` and `post` counterparts.
 
                         event flow
 ```
-
-`pre` happens before a specific event
-
-`post` happens before a specific event
 
 **Example:**
 
