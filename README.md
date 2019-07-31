@@ -95,7 +95,7 @@ function exampleNetlifyPlugin(config) {
 
 ## Simplified Build Env
 
-In an effort to simplify how users interact with the build environment & to match remote/local experiences. The folder structure of the build environment is also being revamped.
+The folder structure of the build environment is also being revamped to streamline & simplify how users interact with it.
 
 - `.netlify` - Main folder
 - `.netlify/src` - Source code from repo, zip, tar
