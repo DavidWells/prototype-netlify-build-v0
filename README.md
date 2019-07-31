@@ -14,7 +14,7 @@ Events are activities happening in the build system.
 const lifecycle = [
   /* ↓ Build initialization steps */
   'init',
-  /* ↓ Parse netlify.toml & resolve any dynamic configuration include build image if specified */
+  /* ↓ Parse netlify.toml & resolve any dynamic configuration */
   'configParse',
   /* ↓ Fetch previous build cache */
   'getCache',
