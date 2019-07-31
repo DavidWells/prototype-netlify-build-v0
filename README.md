@@ -128,6 +128,32 @@ build:
       npm run build
 ```
 
+Configuration now supports `environment` variables & `secrets`.
+
+To reference an environment variable in Netlify config:
+
+```yml
+foo: ${env:MY_ENV_VAR}
+```
+
+To reference a secret in Netlify config:
+
+```yml
+bar: ${secrets:MY_REMOTE_SECRET}
+```
+
+## CLI commands
+
+```
+netlify build
+```
+
+Test out the build flow. This will output everything that happens in the build flow without executing the plugins.
+
+```
+netlify build --dry-run
+```
+
 ## Simplified Build Env
 
 The folder structure of the build environment is also being revamped to streamline & simplify how users interact with it.
