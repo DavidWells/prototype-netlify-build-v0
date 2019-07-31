@@ -14,14 +14,14 @@ Events are activities happening in the build system.
 const lifecycle = [
   /* ↓ Build initialization steps */
   'init',
-  /* ↓ Parse netlify.toml and resolve any dynamic configuration include build image if specified */
+  /* ↓ Parse netlify.toml & resolve any dynamic configuration include build image if specified */
   'configParse',
   /* ↓ Fetch previous build cache */
   'getCache',
   /* ↓ Install project dependancies */
   'install',
   /* ↓ Build the site & functions */
-  'build', // 'build:site', 'build:function',
+  'build',
   /* ↓ Package & optimize artifact */
   'package',
   /* ↓ Deploy built artifact */
