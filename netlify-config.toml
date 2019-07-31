@@ -1,0 +1,44 @@
+version = "06-25-2019"
+
+[build]
+
+  [build.lifecycle]
+  init = [
+    "npm run foo",
+    "export VALUE=lol",
+    "echo \"much wow\""
+  ]
+  getCache = [
+    "echo 'curl custom cache'"
+  ]
+  prebuild = "echo \"${secrets:privateKey}\""
+  build = "echo 'Hello Netlify Build!'\nnpm run build\n"
+
+[[plugins]]
+
+  [plugins."./plugins/netlify-plugin-cypress"]
+  baseUrl = "${env:SITE}"
+  pageLoadTimeout = 60000.0
+
+[[plugins]]
+
+  [plugins."./plugins/netlify-plugin-sitemap"]
+  exclude = "**/dist"
+
+[[plugins]]
+
+  [plugins."./plugins/netlify-plugin-notify"]
+  emails = [
+    "david@netlify.com",
+    "jim@netlify.com"
+  ]
+
+[[plugins]]
+
+  [plugins."./plugins/netlify-contentful-plugin"]
+  enabled = false
+
+[[plugins]]
+
+  [plugins."./plugins/netlify-plugin-lighthouse"]
+  enabled = "${env:LIGHTHOUSE_ENABLED, true}"

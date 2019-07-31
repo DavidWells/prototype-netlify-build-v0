@@ -75,18 +75,25 @@ process.env.SITE = 'https://site.com'
   // deepLog(allPlugins)
 
   const lifecycle = [
+    /* Build initialization steps */
     'init',
+    /* Parse netlify.toml and resolve any dynamic configuration include build image if specified */
     'configParse',
+    /* Fetch previous build cache */
     'getCache',
+    /* Install project dependancies */
     'install',
-    'build',
-    // >
-    // 'build:site'
-    // 'build:function',
+    /* Build the site & functions */
+    'build', // 'build:site', 'build:function',
+    /* Package & optimize artifact */
     'package',
+    /* Deploy built artifact */
     'deploy',
+    /* Save cached assets */
     'saveCache',
+    /* Outputs manifest of resources created */
     'manifest',
+    /* Build finished */
     'finally'
   ]
 
