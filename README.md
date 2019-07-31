@@ -93,6 +93,41 @@ function exampleNetlifyPlugin(config) {
 - **netlify-notify-plugin** to automatically wired up build notifications
 - ... skys the limit 🌈
 
+
+## Configuration
+
+Configuration can be written in `toml`, `yml`, `json`, `json5`, or `javascript`.
+
+**Example:**
+
+```yml
+# Config file `plugins` defines plugins used by build. Plugins are optional
+plugins:
+  - ./localpath/plugin-folder:
+      optionOne: 'hello'
+      optionTwo: 'there'
+  - plugin-from-npm:
+      optionOne: 'neat'
+  - other-plugin-from-npm::
+      arrayOfValues:
+        - david@netlify.com
+        - jim@netlify.com
+
+# Inline `build.lifecycle` steps can be defined
+build:
+  lifecycle:
+    init:
+      - npm run foo
+      - export VALUE=lol
+      - echo "much wow"
+    getCache:
+      - echo 'curl custom cache'
+    prebuild: echo "${secrets:privateKey}"
+    build: |
+      echo 'Hello Netlify Build!'
+      npm run build
+```
+
 ## Simplified Build Env
 
 The folder structure of the build environment is also being revamped to streamline & simplify how users interact with it.
