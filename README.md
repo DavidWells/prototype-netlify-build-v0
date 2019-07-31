@@ -12,25 +12,25 @@ Events are activities happening in the build system.
 
 ```js
 const lifecycle = [
-  /* Build initialization steps */
+  /* ↓ Build initialization steps */
   'init',
-  /* Parse netlify.toml and resolve any dynamic configuration include build image if specified */
+  /* ↓ Parse netlify.toml and resolve any dynamic configuration include build image if specified */
   'configParse',
-  /* Fetch previous build cache */
+  /* ↓ Fetch previous build cache */
   'getCache',
-  /* Install project dependancies */
+  /* ↓ Install project dependancies */
   'install',
-  /* Build the site & functions */
+  /* ↓ Build the site & functions */
   'build', // 'build:site', 'build:function',
-  /* Package & optimize artifact */
+  /* ↓ Package & optimize artifact */
   'package',
-  /* Deploy built artifact */
+  /* ↓ Deploy built artifact */
   'deploy',
-  /* Save cached assets */
+  /* ↓ Save cached assets */
   'saveCache',
-  /* Outputs manifest of resources created */
+  /* ↓ Outputs manifest of resources created */
   'manifest',
-  /* Build finished */
+  /* ↓ Build finished */
   'finally'
 ]
 ```
@@ -92,3 +92,13 @@ function exampleNetlifyPlugin(config) {
 - **netlify-sitemap-plugin** to generate sitemaps after build
 - **netlify-notify-plugin** to automatically wired up build notifications
 - ... skys the limit 🌈
+
+## Simplified Build Env
+
+In an effort to simplify how users interact with the build environment & to match remote/local experiences. The folder structure of the build environment is also being revamped.
+
+- `.netlify` - Main folder
+- `.netlify/src` - Source code from repo, zip, tar
+- `.netlify/cache` - Files persisted across builds
+- `.netlify/cache/dependencies` - All dependencies are cache here. These are used for lookup / install process.
+- `.netlify/build` - Built files
