@@ -42,7 +42,7 @@ The Lifecycle flows through events and their `pre` and `post` counterparts.
 │      pre      │     event      │       post       │
 ├───────────────┼────────────────┼──────────────────┤
 │               │                │                  │
-│               │                │                  │
+│               │                │                  │    ...
 │   prebuild    │     build      │    postbuild     │
 │               │                │                  │
 │               │                │                  │
@@ -52,6 +52,7 @@ The Lifecycle flows through events and their `pre` and `post` counterparts.
 ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ━ ▶
 
                   event flow
+
 ```
 
 `pre` happens before a specific event
